@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number | Interactive Game</title>
+
+    <style>
+        :root {
+            --bg-start: #0f172a;
+            --bg-end: #4338ca;
+            --card: rgba(255, 255, 255, 0.95);
+            --text: #1f2937;
+            --accent: #f97316;
+            --accent-soft: #fb923c;
+            --button: #2563eb;
+            --button-hover: #1d4ed8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f3e8ff 0%, #d8b4fe 100%);
+            color: #1f2937;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 18px 24px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.12);
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.25rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #fbbf24;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 70px rgba(79, 70, 229, 0.12);
+            color: #1f2937;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 2.6rem;
+            letter-spacing: -0.04em;
+        }
+
+        p.intro {
+            margin: 1rem 0 0;
+            line-height: 1.8;
+            color: #334155;
+            font-size: 1.05rem;
+        }
+
+        .status-box {
+            display: grid;
+            gap: 1rem;
+            margin: 2rem 0 1rem;
+            padding: 1.5rem;
+            background: #f5f3ff;
+            border-radius: 20px;
+            border: 1px solid rgba(167, 139, 250, 0.32);
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .status-row span {
+            background: white;
+            padding: 0.75rem 1rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 35px rgba(79, 70, 229, 0.08);
+            min-width: 140px;
+        }
+
+        .game-box {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1.25rem;
+            text-align: center;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 16px;
+            border: 1px solid #cbd5e1;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .buttons-row {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn,
+        #btnReset,
+        .btn-link {
+            border: none;
+            cursor: pointer;
+            border-radius: 999px;
+            padding: 0.95rem 1.6rem;
+            font-weight: 700;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn {
+            background: var(--button);
+            color: white;
+        }
+
+        .btn-link {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .btn:hover,
+        #btnReset:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 30px rgba(37, 99, 235, 0.22);
+        }
+
+        #btnReset {
+            background: #64748b;
+            color: white;
+            width: 100%;
+        }
+
+        .message {
+            font-size: 1.1rem;
+            padding: 1rem 1.25rem;
+            border-radius: 18px;
+            margin: 0 auto;
+            max-width: 100%;
+            line-height: 1.7;
+            color: #1f2937;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+        }
+
+        .message strong {
+            color: #0369a1;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        @media (max-width: 680px) {
+            .container {
+                margin: 24px;
+                padding: 2rem;
+            }
+            .status-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">MyPortfolio</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="game.html" class="active">Game</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <h2>🔮 Guess the Secret Number</h2>
+        <p class="intro">The secret number is hidden in the range below. Every guess gives you a clue and narrows the range. Can you solve it quickly and beat your own best score?</p>
+
+        <div class="status-box">
+            <div class="status-row">
+                <span id="rangeText">Range: 1 - 20</span>
+                <span id="bestScore">Best Score: -</span>
+            </div>
+            <div id="hintText">Hint: Start with a bold guess!</div>
+        </div>
+
+        <div class="game-box">
+            <input type="number" id="guessInput" min="1" max="20" placeholder="Enter your guess...">
+            <div class="buttons-row">
+                <button class="btn" id="guessBtn" onclick="checkGuess()">Guess!</button>
+                <button class="btn" id="giveUpBtn" onclick="revealNumber()">Reveal</button>
+            </div>
+            <p id="gameMessage" class="message">Keep guessing to reveal the secret number.</p>
+            <div class="stats-row">
+                <span>Attempts: <strong id="score">0</strong></span>
+                <span>Status: <strong id="status">—</strong></span>
+            </div>
+            <div class="page-links">
+                <a class="btn-link" href="index.html">Home</a>
+                <a class="btn-link" href="profile.html">Profile</a>
+                <a class="btn-link" href="contact.html">Contact</a>
+            </div>
+            <button onclick="resetGame()" id="btnReset" style="display:none;">Play Again 🔄</button>
+        </div>
+    </main>
+
+    <script>
+        const maxNumber = 30;
+        let secretNumber;
+        let attempts;
+        let minRange;
+        let maxRange;
+
+        function getBestScore() {
+            return Number(localStorage.getItem('bestGuessScore')) || null;
+        }
+
+        function setBestScore(score) {
+            localStorage.setItem('bestGuessScore', score);
+        }
+
+        function updateBestScoreDisplay() {
+            const best = getBestScore();
+            const bestScoreEl = document.getElementById('bestScore');
+            bestScoreEl.innerText = `Best Score: ${best ? best : '-'}`;
+        }
+
+        function updateRangeText() {
+            document.getElementById('rangeText').innerText = `Range: ${minRange} - ${maxRange}`;
+        }
+
+        function updateHintText(text) {
+            document.getElementById('hintText').innerText = text;
+        }
+
+        function updateStatus(guess) {
+            if (!guess) {
+                document.getElementById('status').innerText = '—';
+                return;
+            }
+            const diff = Math.abs(secretNumber - guess);
+            if (diff === 0) {
+                document.getElementById('status').innerText = 'Perfect!';
+            } else if (diff <= 2) {
+                document.getElementById('status').innerText = 'Scorching hot';
+            } else if (diff <= 5) {
+                document.getElementById('status').innerText = 'Warm';
+            } else {
+                document.getElementById('status').innerText = 'Cold';
+            }
+        }
+
+        function initGame() {
+            secretNumber = Math.floor(Math.random() * maxNumber) + 1;
+            attempts = 0;
+            minRange = 1;
+            maxRange = maxNumber;
+            document.getElementById('score').innerText = attempts;
+            document.getElementById('guessInput').value = '';
+            document.getElementById('gameMessage').innerText = 'Keep guessing to reveal the secret number.';
+            document.getElementById('gameMessage').style.color = '#1f2937';
+            document.getElementById('btnReset').style.display = 'none';
+            document.getElementById('guessBtn').disabled = false;
+            document.getElementById('giveUpBtn').disabled = false;
+            updateRangeText();
+            updateBestScoreDisplay();
+            updateHintText('Hint: Make your first guess and watch the magic happen!');
+            updateStatus(null);
+        }
+
+        function checkGuess() {
+            const guessInput = document.getElementById('guessInput');
+            const guess = Number(guessInput.value);
+            const message = document.getElementById('gameMessage');
+            const scoreDisplay = document.getElementById('score');
+            const resetBtn = document.getElementById('btnReset');
+            const guessBtn = document.getElementById('guessBtn');
+
+            if (!guess || guess < minRange || guess > maxRange) {
+                message.innerText = `⚠️ Enter a number between ${minRange} and ${maxRange}.`;
+                message.style.color = '#dc2626';
+                return;
+            }
+
+            attempts++;
+            scoreDisplay.innerText = attempts;
+            updateStatus(guess);
+
+            if (guess === secretNumber) {
+                message.innerHTML = `🎉 <strong>Well done!</strong> You found the secret number ${secretNumber} in ${attempts} attempts.`;
+                message.style.color = '#16a34a';
+                resetBtn.style.display = 'block';
+                guessBtn.disabled = true;
+                document.getElementById('giveUpBtn').disabled = true;
+                const best = getBestScore();
+                if (!best || attempts < best) {
+                    setBestScore(attempts);
+                    updateBestScoreDisplay();
+                    updateHintText('New best score! Great job!');
+                } else {
+                    updateHintText('Nice work! Try again to beat your best score.');
+                }
+            } else {
+                if (guess > secretNumber) {
+                    maxRange = Math.min(maxRange, guess - 1);
+                } else {
+                    minRange = Math.max(minRange, guess + 1);
+                }
+
+                updateRangeText();
+                const diff = Math.abs(secretNumber - guess);
+                if (diff <= 2) {
+                    updateHintText('You are burning hot! Almost there.');
+                } else if (diff <= 5) {
+                    updateHintText('You are warm. Keep going!');
+                } else if (diff <= 10) {
+                    updateHintText('A little cold. Try a number closer to the middle.');
+                } else {
+                    updateHintText('Ice cold! You are far from the secret number.');
+                }
+                message.innerText = guess > secretNumber ? '📈 Too high! Lower your next guess.' : '📉 Too low! Raise your next guess.';
+                message.style.color = '#d97706';
+            }
+
+            guessInput.value = '';
+            guessInput.focus();
+        }
+
+        function revealNumber() {
+            const message = document.getElementById('gameMessage');
+            message.innerHTML = `👀 The secret number was <strong>${secretNumber}</strong>. Want to try again?`;
+            message.style.color = '#0f172a';
+            document.getElementById('btnReset').style.display = 'block';
+            document.getElementById('guessBtn').disabled = true;
+            document.getElementById('giveUpBtn').disabled = true;
+            updateHintText('You gave up this round. Reset to play another round.');
+        }
+
+        function resetGame() {
+            initGame();
+        }
+
+        document.getElementById('guessInput').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                checkGuess();
+            }
+        });
+
+        initGame();
+    </script>
+</body>
+</html>
