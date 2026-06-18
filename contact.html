@@ -316,15 +316,18 @@ function guardMailto(e){
     }
 }
 
-// Mengawal form hantaran baru mengikut tick box terma
+// Mengawal form hantaran baru mengikut tick box terma dan mengosongkan form selepas submit
 function guardFormSubmission(e) {
     const checkbox = document.getElementById('agreeTerms');
     if (!checkbox || !checkbox.checked) {
         e.preventDefault();
         alert('Please check and agree to the Terms & Conditions above before submitting the form.');
     } else {
-        e.preventDefault();
-        alert('Form details captured successfully! (Simulation only)');
+        e.preventDefault(); // Menghentikan seketika refresh asal browser untuk simulasi
+        alert('Form details captured successfully! Borang telah dikosongkan.');
+        
+        // Memastikan borang kembali kosong (Back to original state)
+        e.target.reset(); 
     }
 }
 
